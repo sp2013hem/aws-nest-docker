@@ -1,10 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
 import { AppService } from './app.service';
+import { PostService } from './post.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private readonly postService: PostService,
   ) {}
 
   @Get()
@@ -12,4 +14,26 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('post/:id')
+  async getPostById(@Param('id') id: string): Promise<any> {
+    return this.postService.post({ id: Number(id) });
+  }
+
+  @Get('posts')
+  async getPublishedPosts(): Promise<any> {
+    return this.postService.posts({});
+  }
+
+  @Post('post')
+  async createDraft(@Body() postData: { title: string }): Promise<any> {
+    const { title } = postData;
+    return this.postService.createPost({
+      title,
+    });
+  }
+
+  @Delete('post/:id')
+  async deletePost(@Param('id') id: string): Promise<any> {
+    return this.postService.deletePost({ id: Number(id) });
+  }
 }
