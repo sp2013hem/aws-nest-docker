@@ -14,6 +14,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('hi')
+  getHi(): string {
+    return 'hi';
+  }
+
   @Get('post/:id')
   async getPostById(@Param('id') id: string): Promise<any> {
     return this.postService.post({ id: Number(id) });
